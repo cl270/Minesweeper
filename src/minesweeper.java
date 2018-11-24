@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class minesweeper {
 	public static void main ( String [] arguments )
@@ -12,13 +13,17 @@ public class minesweeper {
 		int ratio = Integer.valueOf(mineScan.nextLine());
 		
 		boolean[][] board = new boolean[dimensions][dimensions];
+		int prob;
+		String minePrint;
 		
 		for (int i = 0; i< dimensions; i++) {
 			for(int j = 0; j<dimensions; j++) {
-				
-				
-				//board[i][j] =
+				prob = ThreadLocalRandom.current().nextInt(0, 101);
+				board[i][j] = (prob<=ratio);
+				minePrint = board[i][j] ? "x" : "o";
+				System.out.print(minePrint);
 			}
+			System.out.println("");
 		}
 		
 		
