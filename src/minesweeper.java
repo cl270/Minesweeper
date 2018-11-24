@@ -52,14 +52,12 @@ public class minesweeper {
 				System.out.println("");
 			}
 		}
-		
-		//System.out.println(myLine);
     }
 	
 	private static int[][] floodFill(int[][] status, boolean[][] b, int x, int y, int dim) {
 		if(b[x][y] || x >= dim || y>= dim || x<0 || y<0) { return status;}
 		
-		countAdjacentMines(status, b, x, y);
+		countAdjacentMines(status, b, x, y, dim);
 		
 		floodFill(status, b, x+1, y, dim);
 		floodFill(status, b, x-1, y, dim);
@@ -69,11 +67,13 @@ public class minesweeper {
 		return status;
 	}
 
-	private static void countAdjacentMines(int[][] status, boolean[][] b, int x, int y) {
+	private static void countAdjacentMines(int[][] status, boolean[][] b, int x, int y, int dim) {
 		status[x][y]++;
 		for(int i = -1; i< 2; i++) {
+			if(x+i > dim || x+i<0) {continue;}
 			for(int j = -1; j<2; j++) {
-				if(b[x+i][j+i]) { status[x][y]++;}
+				if(y+j > dim || y+j<0) {continue;}
+				if(b[x+i][y+j]) { status[x][y]++;}
 			}
 		}
 	}
