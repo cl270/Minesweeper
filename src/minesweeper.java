@@ -5,6 +5,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class minesweeper {
 	public static void main ( String [] arguments )
     {
+		runMinesweeper();
+		
+    }
+
+	private static void runMinesweeper() {
 		System.out.print("Please enter side dimensions: ");
 		Scanner dimScan = new Scanner(System.in);
 		int dimensions = Integer.valueOf(dimScan.nextLine());
@@ -43,14 +48,12 @@ public class minesweeper {
 			
 			winner = displayBoard(dimensions, boardStatus, mineCounter);
 			
-			
 			if(winner) { 
 				System.out.println("You opened all tiles without a mine. you win");
 				break;
 			}
 		}
-		
-    }
+	}
 
 	private static boolean displayBoard(int dimensions, int[][] boardStatus, int minecounter) {
 		int counter = 0;
