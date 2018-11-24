@@ -14,12 +14,9 @@ public class minesweeper {
 		int ratio = Integer.valueOf(mineScan.nextLine());
 		
 		boolean[][] board = new boolean[dimensions][dimensions];
-		int prob;
-		String minePrint;
+		int mineCounter = createBoard(dimensions, ratio, board, 0);;
 		
-		createBoard(dimensions, ratio, board);
-		
-		boolean alive = true;
+		boolean winner = false;
 		int x,y;
 		String coords;
 		String[] xy;
@@ -27,7 +24,7 @@ public class minesweeper {
 		int[][] boardStatus = new int[dimensions][dimensions];
 		for(int[] row:boardStatus) {Arrays.fill(row, -1);}
 		
-		while(alive) {
+		while(true) {
 			System.out.print("Please enter tile to sweep, format \"x,y\": ");
 			Scanner location = new Scanner(System.in);
 			
@@ -39,23 +36,40 @@ public class minesweeper {
 			
 			if(board[x][y]) { 
 				System.out.println("You stepped on a mine. Game over");
-				alive = false;
 				break;
 			}
 				
 			boardStatus = floodFill(boardStatus,board, x, y, dimensions);
 			
-			for (int i = 0; i< dimensions; i++) {
-				for(int j = 0; j<dimensions; j++) {
-					System.out.print(boardStatus[i][j]);
-				}
-				System.out.println("");
+			winner = displayBoard(dimensions, boardStatus, mineCounter);
+			
+			
+			if(winner) { 
+				System.out.println("You opened all tiles without a mine. you win");
+				break;
 			}
 		}
+		
     }
+
+	private static boolean displayBoard(int dimensions, int[][] boardStatus, int minecounter) {
+		int counter = 0;
+		for (int i = 0; i< dimensions; i++) {
+			for(int j = 0; j<dimensions; j++) {
+				if(boardStatus[i][j]>=0) {System.out.print(boardStatus[i][j]);}
+				else {
+					counter++;
+					System.out.print("*"); 
+					
+				}
+			}
+			System.out.println("");
+		}
+		return counter == minecounter;
+	}
 	
 	private static int[][] floodFill(int[][] status, boolean[][] b, int x, int y, int dim) {
-		if(b[x][y] || x >= dim || y>= dim || x<0 || y<0) { return status;}
+		if(x >= dim || y>= dim || x<0 || y<0 || status[x][y] >=0 || b[x][y] ) { return status;}
 		
 		countAdjacentMines(status, b, x, y, dim);
 		
@@ -70,26 +84,26 @@ public class minesweeper {
 	private static void countAdjacentMines(int[][] status, boolean[][] b, int x, int y, int dim) {
 		status[x][y]++;
 		for(int i = -1; i< 2; i++) {
-			if(x+i > dim || x+i<0) {continue;}
+			if(x+i >= dim || x+i<0) {continue;}
 			for(int j = -1; j<2; j++) {
-				if(y+j > dim || y+j<0) {continue;}
+				if(y+j >= dim || y+j<0) {continue;}
 				if(b[x+i][y+j]) { status[x][y]++;}
 			}
 		}
 	}
 
-	private static void createBoard(int dimensions, int ratio, boolean[][] board) {
+	private static int createBoard(int dimensions, int ratio, boolean[][] board, int mineCounter) {
 		int prob;
-		String minePrint;
 		System.out.println("Please Note * denote unknown tile, Integer denotes number of mines adjacent to visited tile");
 		for (int i = 0; i< dimensions; i++) {
 			for(int j = 0; j<dimensions; j++) {
 				prob = ThreadLocalRandom.current().nextInt(0, 101);
 				board[i][j] = (prob<=ratio);
-				//minePrint = board[i][j] ? "x" : "o";
+				mineCounter = (board[i][j] ? mineCounter+1 : mineCounter);
 				System.out.print("*");
 			}
 			System.out.println("");
 		}
+		return mineCounter;
 	}
 }
