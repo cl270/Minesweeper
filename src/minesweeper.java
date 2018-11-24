@@ -16,6 +16,39 @@ public class minesweeper {
 		int prob;
 		String minePrint;
 		
+		createBoard(dimensions, ratio, board);
+		
+		boolean alive = true;
+		int x,y;
+		String coords;
+		String[] xy;
+		
+		
+		while(alive) {
+			System.out.print("Please enter tile to sweep, format \"x,y\": ");
+			Scanner location = new Scanner(System.in);
+			
+			coords = location.nextLine();
+			xy = coords.trim().split(",");
+			
+			x = Integer.valueOf(xy[0]);
+			y = Integer.valueOf(xy[1]);
+			
+			if(board[x][y]) { 
+				System.out.println("You lost");
+				alive = false;
+			}
+			
+			
+			
+		}
+		
+		//System.out.println(myLine);
+    }
+
+	private static void createBoard(int dimensions, int ratio, boolean[][] board) {
+		int prob;
+		String minePrint;
 		for (int i = 0; i< dimensions; i++) {
 			for(int j = 0; j<dimensions; j++) {
 				prob = ThreadLocalRandom.current().nextInt(0, 101);
@@ -25,12 +58,5 @@ public class minesweeper {
 			}
 			System.out.println("");
 		}
-		
-		
-		while(true) {
-			
-		}
-		
-		//System.out.println(myLine);
-    }
+	}
 }
